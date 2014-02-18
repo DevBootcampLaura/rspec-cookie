@@ -33,6 +33,7 @@ describe Cookie do
       it "throws a type error by passing a string" do
         expect { cookie.bake!("string") }.to raise_error(TypeError)
       end
+      # allow(cookie).to receive(:bake!).with(kind_of(String))
     end
 
     context "with valid input" do

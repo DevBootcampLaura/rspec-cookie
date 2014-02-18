@@ -10,7 +10,8 @@ describe Cookie do
   describe "#initialize" do
     context "with valid input" do
       it "creates a new Cookie of the specified type" do
-        cookie.type.should eq(type)
+        # cookie.type.should eq(type)
+        expect(cookie.type).to eq(type)
       end
     end
 
@@ -22,13 +23,30 @@ describe Cookie do
   end
 
   describe "#type" do
-    it "returns the type of the cookie"
+    it "returns the type of the cookie" do
+      expect(cookie.type).to eq("peanut butter")
+    end
   end
 
   describe "#bake!" do
-    it "requires an integer time argument"
+    context "with invalid input" do
+      it "throws a type error by passing a string" do
+        expect { cookie.bake!("string") }.to raise_error(TypeError)
+      end
+    end
 
-    it "returns the cookie object"
+    context "with valid input" do
+      it "requires an integer time argument" do
+        obj = cookie.bake!(2)
+        expect(obj).to be_a_kind_of(Cookie)
+      end
+    end
+
+
+    it "returns the cookie object" do
+      obj = cookie.bake!(2)
+      expect(obj).to be_a_kind_of(Cookie)
+    end
 
     it "changes the status of the cookie when given enough time" do
       expect { cookie.bake!(10) }.to change(cookie, :status)
@@ -36,26 +54,43 @@ describe Cookie do
   end
 
   describe "#status" do
-    it "returns the cookie's current status"
+    it "returns the cookie's current status" do
+      expect(cookie.status).to be_a_kind_of(Symbol)
+    end
 
     context "when unbaked" do
-      it "is `:doughy`" 
+      it "is `:doughy`" do
+        cookie.bake!(0)
+        expect(cookie.status).to eq(:doughy)
+      end
     end
 
     context "when baked for less than 7 minutes" do
-      it "is `:doughy`"
-    end  
+      it "is `:doughy`" do
+        cookie.bake!(5)
+        expect(cookie.status).to eq(:doughy)
+      end
+    end
 
     context "when baked for at least 7 but less than 10 minutes" do
-      it "is `:almost_ready`"
+      it "is `:almost_ready`" do
+        cookie.bake!(8)
+        expect(cookie.status).to eq(:almost_ready)
+      end
     end
 
     context "when baked for at least 10 but less than 12 minutes" do
-      it "is `:ready`"
+      it "is `:ready`" do
+        cookie.bake!(11)
+        expect(cookie.status).to eq(:ready)
+      end
     end
 
     context "when baked for at least 12 minutes" do
-      it "is `:burned`"
+      it "is `:burned`" do
+        cookie.bake!(14)
+        expect(cookie.status).to eq(:burned)
+      end
     end
   end
 end
